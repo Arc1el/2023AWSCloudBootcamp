@@ -36,7 +36,44 @@
   - 방화벽, ACL 및 관리자 -> AWS보안그룹, 네트워크ACL, AWS Identitiy and Access Management(IAM)
   - 라우터, 네트워크 파이프 라인 및 스위치 -> Elastic Load Balancing, Amazon Virtual Private Cloud(Amazon VPC)
   - 온프레미스 서버 -> Amazon Machine Image(AMI), Amazon Elastic Compute Cloud(Amazon EC2)
-  - DAS(직접 연결 스토리지), SAN(스토리지 영역 네트워크), NAS(네트워크 연결 스토리지) 및 RDBMS<br>Amazon Elastic Block Store(Amazon EBS), Amazon Elastic File System(Amazon EFS), Amazon Simple Storage Service(Amazon S3), Amazon Relational Database Service(Amazon RDS)
+  - DAS(직접 연결 스토리지), SAN(스토리지 영역 네트워크), NAS(네트워크 연결 스토리지) 및 RDBMS -><br>Amazon Elastic Block Store(Amazon EBS), Amazon Elastic File System(Amazon EFS), Amazon Simple Storage Service(Amazon S3), Amazon Relational Database Service(Amazon RDS)
   - 기존 데이터 센터의 원하는 모든 작업을 AWS서비스를 활용하여 수행 가능함
+> 클라우드 컴퓨팅은 인터넷을 통해 리소스를 온디맨트로 제공하는것. 요금은 종량제로 청구됨<br>
+> 클라우드 컴퓨팅을 사용하면 인프라를 소프트웨어로 간주 할 수 있음.<br>
+> IaaS, PaaS, SaaS라는 클라우드 서비스 모델이 있음.<br>
+> 클라우드 배포모델은 클라우드, 하이브리드, 온프레미스(프라이빗 클라우드)로 나뉨<br>
+> 기존 IT로 구현할 수 있는 거의 모든 서비스를 AWS 클라우드 컴퓨팅 서비스로 구현 가능
 # Section 2. 클라우드 컴퓨팅의 이점
-  
+- 자본 비용을 가변 비용으로 대체
+  - 자본비용이란 자산, 산업용 건물 또는 장비와 같은 물리적 자산을 획득, 업그레이드 및 유지 관리하기 위해 사용하는 자금.
+  - 하드웨어 사용 여부와 관계없이 데이터 센터에 비용을 모두 지불해야 함.
+  - 가변 비용의 경우 리소스를 사용할 때만, 사용한 만큼의 리소스에 대해 비용을 지불하므로 기술 비용을 절감 할 수 있음.
+- 거대한 규모의 경제
+  - 물리적 인프라를 소유할때보다 가변 비용이 낮음.
+  - AWS와 같은 공급자는 더 높은 규모의 경제를 달성 할 수 있으며, 이는 종량제 요금이 낮아지는 효과를 가져옴.
+- 용량 추정 불필요
+  - 인프라에 필요한 용량을 추정 할 필요가 없음.
+  - 필요한 만큼의 리소스에 액세스하고 필요에 따라 확장 또는 축소 할 수 있음.
+- 속도 및 민첩성 향상
+  - 새 IT 리소스를 클릭 몇번 만으로 사용 할 수 있음.
+  - 이는 실험 및 개발에 드는 비용이 절감되고 시간이 단축되어 조직의 민첩성 향상의 의미가 있음.
+- 데이터 센터 운영, 유지관리의 비용 투자 불필요
+  - 인프라에 집중 할 필요가 없으므로, 비즈니스를 차별화하는 프로젝트에 집중할 수 있음.
+  - 서버 관리에 시간을 허비하지 않고 고객에 더욱 집중 할 수 있음.
+- 빠른 시간 안에 전세계에 배포
+  - 클릭 몇번만으로 전세계의 AWS리전에 애플리케이션을 배포 할 수 있음.
+  - 최소비용으로 고객에게 더 짧은 지연시간과 더 나은 경험을 제공 할 수 있음.
+> 자본비용을 가변비용으로 대체<br>
+> 규모의 경제로 얻는 이점<br>
+> 용량 추정 불필요<br>
+> 속도 및 민첩성 향상<br>
+> 데이터 센터 윤영 유지관리에 비용 불필요<br>
+> 몇분만에 전세계 배포(짧은 지연 시간 및 더나은 경험 제공)
+# Section 3. Amazon Web Service(AWS) 소개
+- 웹서비스
+  - 인터넷 또는 인트라넷을 통해 사용할 수 있는 모든 소프트웨어
+  - API상호 작용의 요청 및 응답에 대해 XML 또는 JSON과 같은 표준화된 형식 사용
+  - 특정 OS 또는 Programming Language에 종속되지 않음.
+  - 인터페이스 정의파일을 통해 자체적으로 기술되며 검색 가능.
+- AWS
+  -
