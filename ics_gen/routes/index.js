@@ -1,29 +1,59 @@
 var express = require('express');
 var router = express.Router();
+const fs = require('fs/promises');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// ICS file generate function
+// Parameter : title, startDate, endDate
+// Result : Generate ICS file
+async function generateIcs(title, startDate, endDate) {
+  try {
+    const content = "BEGIN:VCALENDAR\r\n"
+                  + "VERSION:2.0\r\n"
+                  + "CALSCALE:GREGORIAN\r\n"
+                  + "BEGIN:VEVENT\r\n"
+                  + "DTSTART:" + startDate + "\r\n"
+                  + "DTEND:" + endDate + "\r\n"
+                  + "SUMMARY:" + title + "\r\n"
+                  + "END:VEVENT"
+    const filename = "./" + title + ".ics"
+    await fs.writeFile(filename, content);
+    return filename;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 /*
 ICS Generate Router
-input data = [
-              StartDate(yyyyMMdd'T'HHmmss) : String
-              EndDate(yyyyMMdd'T'HHmmss) : String
-              Description(ex. AWS Cloud Bootcamp) : String
-            ] : JSON format
+input data = {
+              startDate(yyyyMMdd'T'HHmmss) : String
+              endDate(yyyyMMdd'T'HHmmss) : String
+              title(ex. AWS Cloud Bootcamp) : String
+            } : JSON format
 
 ex. {
-  "StartDate" : "20230120T130000",
-  "EndDate" : "20230120T163000",
-  "Description" : "AWS CloudBootCamp OfflineSession"
+  "startDate" : "20230120T130000",
+  "endDate" : "20230120T163000",
+  "title" : "AWS CloudBootCamp OfflineSession"
 }
 
-outputdata = .ics file -> save to local storage
+outputdata : .ics file -> save to local storage
+response : send the generated ics filename
 */
-router.get('/ics_gen', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+
+router.post('/ics_gen', async function(req, res, next) {
+  // Define the data from request
+  const receivedData = req.body;
+  const title = receivedData.title;
+  const startDate = receivedData.startDate;
+  const endDate = receivedData.endDate;
+
+  // Create the ICS file
+  const filename = await generateIcs(title, startDate, endDate);
+  console.log(filename + " is generated.\r\n");
+
+  // Send the Response with filename
+  res.send(filename);
 });
 
 
