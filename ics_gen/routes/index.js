@@ -15,7 +15,7 @@ async function generateIcs(title, startDate, endDate) {
                   + "DTEND:" + endDate + "\r\n"
                   + "SUMMARY:" + title + "\r\n"
                   + "END:VEVENT"
-    const filename = "./" + title + ".ics"
+    const filename = "./generatedFiles/" + title + ".ics"
     await fs.writeFile(filename, content);
     return filename;
   } catch (err) {
@@ -55,6 +55,5 @@ router.post('/ics_gen', async function(req, res, next) {
   // Send the Response with filename
   res.send(filename);
 });
-
 
 module.exports = router;
