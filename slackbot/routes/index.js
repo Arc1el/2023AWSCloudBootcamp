@@ -18,7 +18,7 @@ var data = {
 					"emoji": true
 				},
 				"value": "add_calendar_btn",
-				"url": "https://www.phpclasses.org/browse/download/1/file/63438/name/example.ics",
+				"url": "http://server.arc1el.kr:1111/AWS.ics",
 				"action_id": "button-action"
 			}
 		},
@@ -29,11 +29,11 @@ var data = {
 }
 
 router.get('/', async function(req, res, next) {
-  axios.post("https://hooks.slack.com/services/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", data
+  axios.post("https://hooks.slack.com/services/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", data
   ).then(function () {
     res.send("data successfully sended");
-  }).catch(function () {
-    res.send("error occured");
+  }).catch(function (e) {
+    res.send(e);
   })
 });
 
