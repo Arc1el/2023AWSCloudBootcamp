@@ -2,8 +2,10 @@ import warnings
 from unicodedata import category
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from time import sleep
+import datetime
 import pandas as pd
 import numpy as np
 
@@ -30,7 +32,7 @@ items = soup.select("#__next > div.JobList_cn__t_THp > div > div > div.List_List
 # datas(1)
 urls = []
 for item in items:
-    url = item.select_one("#__next > div.JobList_cn__t_THp > div > div > div.List_List_container__JnQMS > ul > li > div > a")["href"]
+    url = item.select_one("a")["href"]
     urls.append("https://wanted.co.kr" + url) 
     
 print("Urls : ")
@@ -44,6 +46,21 @@ for url in urls:
     driver.get(url)
     #driver.implicitly_wait(30)
     sleep(1)
+    
+    # for dynamic contents, scroll the page 0 to 3500
+    driver.execute_script('window.scrollTo(0, 500);');sleep(0.3);driver.execute_script('window.scrollTo(500, 1000);');sleep(0.3)
+    driver.execute_script('window.scrollTo(1000, 1500);');sleep(0.3);driver.execute_script('window.scrollTo(1500, 2000);');sleep(0.3)
+    driver.execute_script('window.scrollTo(2000, 2500);');sleep(0.3);driver.execute_script('window.scrollTo(2500, 3000);');sleep(0.3)
+    driver.execute_script('window.scrollTo(3000, 3500);');sleep(0.3);driver.execute_script('window.scrollTo(3500, 4000);');sleep(1)
+    
+    # scroll to the div that location and endDate data exist
+    try:
+        element = driver.find_element(By.CSS_SELECTOR, "#__next > div.JobDetail_cn__WezJh > div.JobDetail_contentWrapper__DQDB6 > div.JobDetail_relativeWrapper__F9DT5 > div > div.JobContent_descriptionWrapper__SM4UD > section.JobWorkPlace_className__ra6rp")
+        location = element.location_once_scrolled_into_view
+        driver.execute_script('arguments[0].scrollIntoView(true);', element)
+        sleep(2)
+    except:
+        pass
 
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
@@ -61,9 +78,9 @@ for url in urls:
             qualifications = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section > p:nth-child(5)").get_text()
             prefer = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(7)").get_text()
             welfare = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(9)").get_text()
-            stack = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(11)").get_text()
             endDate = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobWorkPlace_className__ra6rp > div:nth-child(1) > span.body").get_text()
             location = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobWorkPlace_className__ra6rp > div:nth-child(2) > span.body").get_text()
+            stack = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(11)").get_text()
         except:
             pass
         finally:
@@ -76,12 +93,10 @@ for url in urls:
             temp.append(qualifications)
             temp.append(prefer)
             temp.append(welfare)
-            temp.append(stack)
             temp.append(endDate)
+            temp.append(stack)
             datas.append(temp)
             
-        
-
 print("Data Length : " + str(len(datas)))
 
 # convert python array -> numpy array -> pandas dataframe
@@ -89,7 +104,7 @@ datas_narray = np.array(datas)
 dataframe = pd.DataFrame(datas_narray)
 
 # rename columns
-dataframe.columns = ["회사명", "위치", "포지션", "회사소개", "주요업무", "자격요견", "우대사항", "혜택 및 복지", "기술스택", "마감일"]
+dataframe.columns = ["회사명", "위치", "포지션", "회사소개", "주요업무", "자격요견", "우대사항", "혜택 및 복지", "마감일", "기술스택"]
 
 # save dataframe to csv using utf-8 encording
 dataframe.to_csv("data.csv", mode='w', encoding="utf-8-sig")
