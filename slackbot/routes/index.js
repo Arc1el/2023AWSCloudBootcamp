@@ -19,7 +19,8 @@ function sendMessage(data){
 	location = data.location
 	position = data.position
 	description = data.description
-	fileUrl = "http://server.arc1el.kr:1111/" + data.title + ".ics"
+	timestamp = data.timestamp
+	fileUrl = "http://server.arc1el.kr:1111/" + timestamp + ".ics"
 	message = {
 		"blocks": [
 			{
