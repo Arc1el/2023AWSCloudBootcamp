@@ -5,7 +5,7 @@ const fs = require('fs/promises');
 // ICS file generate function
 // Parameter : title, startDate, endDate
 // Result : Generate ICS file
-async function generateIcs(title, startDate, endDate) {
+async function generateIcs(title, startDate, endDate, receivedData) {
   try {
     const content = "BEGIN:VCALENDAR\r\n"
                   + "VERSION:2.0\r\n"
@@ -17,7 +17,7 @@ async function generateIcs(title, startDate, endDate) {
                   + "END:VEVENT"
     const filename = "./generatedFiles/" + title + ".ics"
     await fs.writeFile(filename, content);
-    return filename;
+    return receivedData;
   } catch (err) {
     console.log(err);
   }
@@ -49,7 +49,7 @@ router.post('/ics_gen', async function(req, res, next) {
   const endDate = receivedData.endDate;
 
   // Create the ICS file
-  const filename = await generateIcs(title, startDate, endDate);
+  const filename = await generateIcs(title, startDate, endDate, receivedData);
   console.log(filename + " is generated.\r\n");
 
   // Send the Response with filename
