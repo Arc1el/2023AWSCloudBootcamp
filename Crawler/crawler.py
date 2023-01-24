@@ -5,12 +5,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from time import sleep
-import time
+import datetime
 import pandas as pd
 import numpy as np
 import requests
+import axios
+import json
 
-"""
 # ignore warning message
 warnings.filterwarnings("ignore")
 
@@ -49,7 +50,7 @@ for url in urls:
     #driver.implicitly_wait(30)
     sleep(1)
     
-    # for dynamic contents, scroll the page 0 to 3500
+    # for dynamic contents, scroll the page 0 to 5000
     driver.execute_script('window.scrollTo(0, 500);');sleep(0.3);driver.execute_script('window.scrollTo(500, 1000);');sleep(0.3)
     driver.execute_script('window.scrollTo(1000, 1500);');sleep(0.3);driver.execute_script('window.scrollTo(1500, 2000);');sleep(0.3)
     driver.execute_script('window.scrollTo(2000, 2500);');sleep(0.3);driver.execute_script('window.scrollTo(2500, 3000);');sleep(0.3)
@@ -82,7 +83,36 @@ for url in urls:
             welfare = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(9)").get_text()
             endDate = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobWorkPlace_className__ra6rp > div:nth-child(1) > span.body").get_text()
             location = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobWorkPlace_className__ra6rp > div:nth-child(2) > span.body").get_text()
-            stack = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(11)").get_text()
+            
+            try:
+                stack = soup.select_one("div.JobContent_descriptionWrapper__SM4UD > section.JobDescription_JobDescription__VWfcb > p:nth-child(11)").get_text()
+            except:
+                pass
+            
+            """
+            try:
+                date_object = datetime.datetime.strptime(endDate, "%Y.%m.%d")
+                edate = date_object.strftime("%y%m%d") + "T000000"
+                now = datetime.datetime.now()
+                sdate = now.strftime("%Y%m%d") + "T000000"
+                
+                jsondata = {
+                    "title" : name,
+                    "location" : location,
+                    "description" : description,
+                    "position" : position,
+                    "startDate" : sdate,
+                    "endDate" : edate,
+                    "filename" : "filename11237678945"
+                }
+
+                headers = {"Content-Type" : "application/json; charset=utf-8"}
+                slackAppUrl = "http://server.arc1el.kr:2222/slack/sendMessage"
+                response = axios.post(slackAppUrl, data=json.dumps(jsondata), headers=headers)
+                print(response)
+            except:
+                print("can't send message. check the sdate, edate")
+            """  
         except:
             pass
         finally:
@@ -110,8 +140,8 @@ dataframe.columns = ["회사명", "위치", "포지션", "회사소개", "주요
 
 # save dataframe to csv using utf-8 encording
 dataframe.to_csv("data.csv", mode='w', encoding="utf-8-sig")
-"""
 
+"""
 # send request to slack app-server
 # example data
 datas = [
@@ -122,16 +152,7 @@ datas = [
         "position" : "백엔드 개발자 Backend Developer (3년이상)",
         "startDate" : "20230122T130000",
         "endDate" : "20230122T170000",
-        "timestamp" : time.time()
-    },
-    {
-        "title" : "에이시티게임즈",
-        "location" : "강남구 삼성로 99길 11 (곰비빌딩)",
-        "description" : "에이시티 게임즈는 2019년 IP 전문 게임 개발 회사로 시작하여 IP를 활용한 5개의 게임을 성공적으로 개발/운영하고 있으며 새로운 IP발굴 및 확장을 지속적으로 진행하고 있습니다. 블록체인 기반의 P2E게임인 ZOIDS NFT ARENA 경우 지난달 11월 프론티어 테스트를 진행하였고 내년 정식 런칭을 예정중에 있습니다. 리니지,서든어택,피파온라인,킹덤오브히어로 등 유수한 게임 개발/운영에 참여한 평균 경력 16년 이상의 개발팀이 글로벌 서비스를 운영하고 있습니다. 2023년 미국과 프랑스를 포함한 글로벌 지사 런칭 예정이며,  Web3 마켓을 선도하는 게임 개발사로 자리매김 하고있는 여정에 시너지를 낼 수 있는 동료를 찾고 있습니다.저희는 Web3 시장을 개척하고 선점하는 도전을 해내고 있습니다. 이를 위해 기민하고 탄탄한 전문가들이 모여 새로운 것들을 시도하고 솔루션을 찾아내는 조직입니다 :)아래와 같은 역량과 태도를 갖춘 분이라면 저희와 좋은 시너지를 낼 수 있을거에요!• 스스로 최고의 기준을 설정하고 달성하는 전문성(Professionalism)• 문제를 정의하고 돌파하는 집요함(Problem Solving)과 열정(Enthusiasm)• 정확하게 소통하고 넓게 공유하며 동료들과 효과적으로 협업하는 태도 (Communication & Collaboration)",
-        "position" : "Web3 사업개발(BD)",
-        "startDate" : "20230123T130000",
-        "endDate" : "20230123T170000",
-        "timestamp" : time.time()
+        "filename" : "filename112345"
     }
 ]
 
@@ -139,3 +160,5 @@ slackAppUrl = "http://server.arc1el.kr:2222/slack/sendMessage"
 headers = {"Content-Type" : "application/json; charset=utf-8"}
 response = requests.post(slackAppUrl, json=datas, headers=headers)
 print(response)
+*/
+"""
