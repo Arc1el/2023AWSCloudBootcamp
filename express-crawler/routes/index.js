@@ -75,8 +75,7 @@ async function crawl(){
     values = values.map(val => val.toString().replace(/,/g, ' '));
     csv += values.join(',') + '\n';
   });
-  
-  fs.writeFileSync('data.csv', csv);
+  fs.writeFileSync('data.csv', csv, { encoding: 'utf8' });
 };
 
 /* GET home page. */
