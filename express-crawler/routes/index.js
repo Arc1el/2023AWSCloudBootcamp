@@ -32,7 +32,7 @@ async function crawl(){
   for(index=0; index<link_length; index++){
     console.log("[" + index + "] " + "Crawling the " + link_list[index].link + " Data...")
     detail_url = link_list[index].link
-    const browser = await puppeteer.launch({headless: false});
+    const browser = await puppeteer.launch({headless: true});
     const page = await browser.newPage();
     await page.goto(detail_url)
 
@@ -75,13 +75,17 @@ async function crawl(){
     values = values.map(val => val.toString().replace(/,/g, ' '));
     csv += values.join(',') + '\n';
   });
-  fs.writeFileSync('data.csv', csv, { encoding: 'utf8' });
+  fs.writeFileSync('/csvFiles/data_' + new Date() + '.csv', csv, { encoding: 'utf8' });
 };
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  await crawl() 
   res.render('index', { title: 'Express' });
+});
+
+router.get('/crawl', async function(req, res, next) {
+  await crawl() 
+  res.sendStatus(200)
 });
 
 module.exports = router;
